@@ -7,6 +7,7 @@ apt install weston chromium -y
 useradd -m kiosk
 mkdir /home/kiosk/.config
 cp weston.ini /home/kiosk/.config
+cp kiosk.sh /home/kiosk
 cp kiosk.service /etc/systemd/system
 systemctl daemon-reload
 systemctl enable kiosk.service
