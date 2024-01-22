@@ -2,7 +2,7 @@
 
 sudo apt update && sudo apt upgrade -y
 
-apt install weston chromium -y
+apt install weston chromium xwayland -y
 
 useradd -m kiosk
 mkdir /home/kiosk/.config
@@ -16,6 +16,9 @@ cp 99-touch-mirror.rules /etc/udev/rules.d
 ln -sf /dev/null /etc/udev/rules.d/90-libinput-fuzz-override.rules
 systemd-hwdb update
 systemctl disable getty@.service
+chown -R kiosk /home/kiosk
+rm -rf /usr/share/icons/Adwaita/cursors/*
+cp left_ptr /usr/share/icons/Adwaita/cursors
 
 echo "NAutoVTs=0" >> /etc/systemd/logind.conf
 echo "ReserveVT=0" >> /etc/systemd/logind.conf
