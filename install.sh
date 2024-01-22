@@ -1,6 +1,9 @@
 #/bin/bash
 
-apt install weston chromium
+sudo apt update && sudo apt upgrade -y
+
+apt install weston chromium -y
+
 useradd -m kiosk
 mkdir /home/kiosk/.config
 cp weston.ini /home/kiosk/.config
