@@ -1,8 +1,8 @@
 #/bin/bash
 
-sudo apt update && sudo apt upgrade -y
+apt update && apt upgrade -y
 
-apt install weston chromium xwayland -y
+apt install weston chromium-browser xwayland -y
 
 useradd -m kiosk
 mkdir /home/kiosk/.config
