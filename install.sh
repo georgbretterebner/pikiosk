@@ -15,7 +15,7 @@ systemctl disable getty@.service
 
 echo "NAutoVTs=0" >> /etc/systemd/logind.conf
 echo "ReserveVT=0" >> /etc/systemd/logind.conf
-echo " quiet nosplash loglevel=0 vt.global_cursor_default=0" > /boot/cmdline.txt
+echo " quiet nosplash loglevel=0 vt.global_cursor_default=0" >> /boot/cmdline.txt
 echo " avoid_warnings=1" >> /boot/config.txt
 echo " disable_splash=1" >> /boot/config.txt
 
