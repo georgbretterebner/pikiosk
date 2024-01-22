@@ -1,0 +1,29 @@
+[Unit]
+Description=Weston Kiosk
+RequiresMountsFor=/run
+After=network-online.target
+
+[Service]
+User=kiosk
+WorkingDirectory=/home/kiosk
+PermissionsStartOnly=true
+Restart=always
+PAMName=login
+
+UtmpIdentifier=tty1
+TTYPath=/dev/tty1
+TTYReset=yes
+TTYVHangup=yes
+TTYVTDisallocate=yes
+
+StandardOutput=tty
+StandardInput=tty
+StandardError=journal
+
+ExecStartPre=/bin/chvt 1
+ExecStart=/usr/bin/weston
+
+IgnoreSIGPIPE=no
+
+[Install]
+WantedBy=multi-user.target
