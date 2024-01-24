@@ -26,7 +26,7 @@ DHCP=ipv4
 
 EOF
 
-echo "1.1.1.1" > resolve.conf
+echo "nameserver 1.1.1.1" > resolve.conf
 
 if [ -z "$ip_addr" ]; then
   echo "Using DHCP"

@@ -49,8 +49,8 @@ rm -f ./image/etc/systemd/system/multi-user.target.wants/networking.service
 ln -s ./image/usr/lib/systemd/system/systemd-networkd.service ./image/etc/systemd/system/network-online.target.wants
 ln -s ./image/usr/lib/systemd/system/systemd-networkd.service ./image/etc/systemd/system/multi-user.target.wants
 
-rm -f ./image/etc/resolve.conf
-mv ./resolve.conf ./image/etc
+cat ./resolve.conf >> ./image/etc/resolve.conf
+rm -f ./resolve.conf
 
 mv ./wpa_supplicant-wlan0.conf ./image/etc/wpa_supplicant
 ln -s ./image/lib/systemd/system/wpa_supplicant@.service ./image/etc/systemd/system/multi-user.target.wants/wpa_supplicant@wlan0.service
