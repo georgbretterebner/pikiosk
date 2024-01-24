@@ -1,13 +1,11 @@
 #!/bin/bash
 
 apt update && apt upgrade -y
-
-apt install weston chromium-browser xwayland -y
+apt install xwayland cage -y
 
 useradd -m kiosk
-mkdir /home/kiosk/.config
-cp weston.ini /home/kiosk/.config
-cp kiosk.sh /home/kiosk
+mkdir /home/kiosk/cef
+cp -r cef-bin/* /home/kiosk/cef
 cp kiosk.service /etc/systemd/system
 systemctl daemon-reload
 systemctl enable kiosk.service
@@ -17,6 +15,7 @@ ln -sf /dev/null /etc/udev/rules.d/90-libinput-fuzz-override.rules
 systemd-hwdb update
 systemctl disable getty@.service
 chown -R kiosk /home/kiosk
+
 rm -rf /usr/share/icons/Adwaita/cursors/*
 cp left_ptr /usr/share/icons/Adwaita/cursors
 
@@ -40,4 +39,6 @@ systemctl disable systemd-logind.service
 systemctl disable bluetooth.service
 systemctl disable hciuart.service
 
-reboot
+rm -rf /kioskinstall
+
+#reboot

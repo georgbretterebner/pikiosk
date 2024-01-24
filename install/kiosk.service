@@ -1,5 +1,5 @@
 [Unit]
-Description=Weston Kiosk
+Description=Cage Kiosk
 RequiresMountsFor=/run
 After=network-online.target
 
@@ -21,7 +21,7 @@ StandardInput=tty
 StandardError=journal
 
 ExecStartPre=/bin/chvt 1
-ExecStart=/usr/bin/weston
+ExecStart=/usr/bin/cage -- /home/kiosk/cef/cefsimple --url="homeassistant.realraum.at"
 
 IgnoreSIGPIPE=no
 
