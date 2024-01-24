@@ -5,7 +5,7 @@ Before=rc-local.service
 ConditionFileNotEmpty=/kiosksetup/firstboot.sh
 
 [Service]
-ExecStart=/kiosksetup/firstboot.sh
+ExecStart=/sbin/bash -c "/kiosksetup/firstboot.sh"
 ExecStartPost=/bin/rm /kiosksetup/firstboot.sh
 Type=oneshot
 RemainAfterExit=no
