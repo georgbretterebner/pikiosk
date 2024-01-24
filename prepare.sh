@@ -38,11 +38,13 @@ tar -xj --strip-components=2 -C cef-bin
 mkdir ./image/kiosksetup/cef-bin
 mv cef-bin ./image/kiosksetup
 
-
-mv ./20-wireless.network ./image/etc/systemd/network
+mv ./wifi.conf ./image/etc/wpa_supplicant
 cp ./firstboot.service ./image/lib/systemd/system
 ln -s ./image/lib/systemd/system/firstboot.service ./image/etc/systemd/system/multi-user.target.wants/firstboot.service
 mv ./firstboot.sh ./image/kiosksetup
+chmod +x ./firstboot.sh
+
+chown -R root ./image/kiosksetup
 
 sync
 umount ./image

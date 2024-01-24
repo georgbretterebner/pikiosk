@@ -28,16 +28,15 @@ reboot
 
 EOF
 
-cat <<EOF > 20-wireless.network
-[Match]
-Name=wlan0
+cat <<EOF > wifi.conf
+ctrl_interface=/run/wpa_supplicant
+ctrl_interface_group=netdev
+update_config=1
 
-[Network]
-DHCP=yes
+country=AT
 
-[Wireless]
-SSID=$wifi_ssid
-KeyManagement=WPA-PSK
-PSK=$wifi_password
-
+network={
+    ssid="$wifi_ssid"
+    psk="$wifi_password"
+}
 EOF
