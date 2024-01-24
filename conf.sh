@@ -23,18 +23,18 @@ apt install xwayland cage -y
 
 useradd -m kiosk
 mkdir /home/kiosk/cef
-cp -r cef-bin/* /home/kiosk/cef
+cp -r /kioskinstall/cef-bin/* /home/kiosk/cef
 systemctl daemon-reload
 systemctl enable kiosk.service
-cp 61-evdev-local.hwdb /etc/udev/hwdb.d
-cp 99-touch-mirror.rules /etc/udev/rules.d
+cp /kioskinstall/61-evdev-local.hwdb /etc/udev/hwdb.d
+cp /kioskinstall/99-touch-mirror.rules /etc/udev/rules.d
 ln -sf /dev/null /etc/udev/rules.d/90-libinput-fuzz-override.rules
 systemd-hwdb update
 systemctl disable getty@.service
 chown -R kiosk /home/kiosk
 
 rm -rf /usr/share/icons/Adwaita/cursors/*
-cp left_ptr /usr/share/icons/Adwaita/cursors
+cp /kioskinstall/left_ptr /usr/share/icons/Adwaita/cursors
 
 echo "NAutoVTs=0" >> /etc/systemd/logind.conf
 echo "ReserveVT=0" >> /etc/systemd/logind.conf

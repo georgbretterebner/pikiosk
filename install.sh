@@ -29,7 +29,7 @@ mkdir image
 mount "${LOOP_DEVICE}p2" ./image
 
 mkdir ./image/kiosksetup
-cp -r ./install/* ./image/kiosksetup
+cp -r ./files/* ./image/kiosksetup
 
 rm -rf ./cef-bin
 mkdir cef-bin
