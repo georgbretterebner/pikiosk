@@ -8,13 +8,39 @@ read -s -p "Enter your WiFi password: " wifi_password
 echo
 read -p "Enter hostname: " hostname
 read -p "Enter webpage to display on kiosk: " url
+echo "Enter IP Address and Subnet-Mask in \"1.2.3.4/24\" format. "
+read -p "Leave Empty for DHCP. IP: " ip_addr
 
 if [ -z "$username" ] || [ -z "$password" ] || [ -z "$wifi_ssid" ] || [ -z "$wifi_password" ] || [ -z "$hostname" ]; then
     echo "Invalid input. Exiting script."
     exit 1
 fi
 
+cat <<EOF > 25-wlan.network
 
+[Match]
+Name=wlan0
+
+[Network]
+DHCP=ipv4
+
+EOF
+
+if [ -z "$ip_addr"]; then
+  echo "Using DHCP"
+else
+  read -p "Enter Gateway IP: " ip_gw
+  read -p "Enter DNS Server IP: " ip_dns
+  
+cat <<EOF >> 25-wlan.network
+
+Address=$ip_addr
+Gateway=$ip_gw
+DNS=$ip_dns
+
+EOF
+
+fi
 
 cat <<EOF > firstboot.sh
 
