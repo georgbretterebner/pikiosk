@@ -1,3 +1,5 @@
+# WIP - Dont' use as-is just yet.
+
 Pi Kiosk - A collection of files and scripts to use a RasPi as a Kiosk device for a webpage. Builds a custom image that is then flashed to an SD-Card. Just run the script and insert the SD-Card into your Pi. Done. Everything else is set up automatically.
 
 Contains udev Rules and hwdb files for calibration and adjustment of 3M EXII Touch controller that we have lying around and use as a control dashboard.
