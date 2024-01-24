@@ -7,11 +7,14 @@ read -p "Enter your WiFi SSID: " wifi_ssid
 read -s -p "Enter your WiFi password: " wifi_password
 echo
 read -p "Enter hostname: " hostname
+read -p "Enter webpage to display on kiosk: " url
 
 if [ -z "$username" ] || [ -z "$password" ] || [ -z "$wifi_ssid" ] || [ -z "$wifi_password" ] || [ -z "$hostname" ]; then
     echo "Invalid input. Exiting script."
     exit 1
 fi
+
+
 
 cat <<EOF > firstboot.sh
 
@@ -39,4 +42,38 @@ network={
     ssid="$wifi_ssid"
     psk="$wifi_password"
 }
+EOF
+
+cat <<EOF > ./install/kiosk.service
+
+[Unit]
+Description=Cage Kiosk
+RequiresMountsFor=/run
+After=network-online.target
+
+[Service]
+User=kiosk
+WorkingDirectory=/home/kiosk
+PermissionsStartOnly=true
+Restart=always
+PAMName=login
+
+UtmpIdentifier=tty1
+TTYPath=/dev/tty1
+TTYReset=yes
+TTYVHangup=yes
+TTYVTDisallocate=yes
+
+StandardOutput=tty
+StandardInput=tty
+StandardError=journal
+
+ExecStartPre=/bin/chvt 1
+ExecStart=/usr/bin/cage -- /home/kiosk/cef/cefsimple --url="$url"
+
+IgnoreSIGPIPE=no
+
+[Install]
+WantedBy=multi-user.target
+
 EOF
