@@ -37,21 +37,16 @@ wget -O - $CEF_DL_LINK |
 tar -xj --strip-components=2 -C cef-bin
 mkdir ./image/kiosksetup/cef-bin
 mv cef-bin ./image/kiosksetup
+
+
 mv ./20-wireless.network ./image/etc/systemd/network
 cp ./firstboot.service ./image/lib/systemd/system
 ln -s ./image/lib/systemd/system/firstboot.service ./image/etc/systemd/system/multi-user.target.wants/firstboot.service
+mv ./firstboot.sh ./image/kiosksetup
 
 sync
 umount ./image
 rmdir ./image
-
-mkdir boot
-mount "${LOOP_DEVICE}p1" ./boot
-cp ./firstboot.sh ./boot
-
-sync
-umount ./boot
-rmdir ./boot
 
 losetup -d "$LOOP_DEVICE"
 

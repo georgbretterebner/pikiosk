@@ -18,9 +18,7 @@ cat <<EOF > firstboot.sh
 echo "$hostname" > /etc/hostname
 systemctl enable ssh
 
-DEF_USER=$(awk -F':' -v uid=1000 '$3 == uid { print $1 }' /etc/passwd)
-uderdel -r $DEF_USER
-
+passwd -l root
 useradd -m $username
 echo '$username:$password' | chpasswd
 usermod -aG sudo $username
