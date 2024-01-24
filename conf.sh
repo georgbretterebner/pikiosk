@@ -19,7 +19,7 @@ fi
 cat <<EOF > firstboot.sh
 
 apt update && apt upgrade -y
-apt install xwayland cage -y
+apt install xwayland cage sudo -y
 
 useradd -m kiosk
 mkdir /home/kiosk/cef
