@@ -26,7 +26,7 @@ DHCP=ipv4
 
 EOF
 
-if [ -z "$ip_addr"]; then
+if [ -z "$ip_addr" ]; then
   echo "Using DHCP"
 else
   read -p "Enter Gateway IP: " ip_gw
@@ -43,6 +43,14 @@ EOF
 fi
 
 cat <<EOF > firstboot.sh
+
+read -p "Show IP config? (y/n)" showip
+
+if [ "\$showip" == "y" ]; then
+    ip addr
+fi
+
+read
 
 apt update && apt upgrade -y
 apt install xwayland cage sudo -y
@@ -63,7 +71,7 @@ rm -rf /usr/share/icons/Adwaita/cursors/*
 cp /kiosksetup/left_ptr /usr/share/icons/Adwaita/cursors
 
 echo "NAutoVTs=0" >> /etc/systemd/logind.conf
-echo "ReserveVT=0" >> /etc/systemd/logind.conf
+echo "ReserveVT=10" >> /etc/systemd/logind.conf
 echo " quiet nosplash loglevel=0 vt.global_cursor_default=0" >> /boot/cmdline.txt
 echo " avoid_warnings=1" >> /boot/config.txt
 echo " disable_splash=1" >> /boot/config.txt

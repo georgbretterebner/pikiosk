@@ -1,16 +1,22 @@
 [Unit]
 Description=FirstBoot
-After=network.target apt-daily.service apt-daily-upgrade.service
-Before=rc-local.service
+After=network.target
+Before=multi-user.target
 ConditionFileNotEmpty=/kiosksetup/firstboot.sh
 
 [Service]
+UtmpIdentifier=tty1
+TTYPath=/dev/tty1
+TTYVHangup=yes
+TTYVTDisallocate=yes
+StandardOutput=tty-force
+StandardInput=tty-force
+StandardError=tty-force
+
 ExecStart=/bin/bash -c "/kiosksetup/firstboot.sh"
-ExecStartPost=/bin/rm /kiosksetup/firstboot.sh
+ExecStartPost=/bin/mv /kiosksetup/firstboot.sh //kiosksetup/firstboot.done
 Type=oneshot
 RemainAfterExit=no
-StandardOutput=journal+console
-StandardError=journal+console
 
 [Install]
 WantedBy=multi-user.target
