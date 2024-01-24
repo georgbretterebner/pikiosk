@@ -28,7 +28,7 @@ reboot
 
 EOF
 
-cat <<EOF > wifi.conf
+cat <<EOF > wpa_supplicant-wlan0.conf
 ctrl_interface=/run/wpa_supplicant
 ctrl_interface_group=netdev
 update_config=1

@@ -9,6 +9,8 @@ ExecStart=/kiosksetup/firstboot.sh
 ExecStartPost=/bin/rm /kiosksetup/firstboot.sh
 Type=oneshot
 RemainAfterExit=no
+StandardOutput=journal+console
+StandardError=journal+console
 
 [Install]
 WantedBy=multi-user.target

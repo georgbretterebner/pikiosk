@@ -38,11 +38,12 @@ tar -xj --strip-components=2 -C cef-bin
 mkdir ./image/kiosksetup/cef-bin
 mv cef-bin ./image/kiosksetup
 
-mv ./wifi.conf ./image/etc/wpa_supplicant
+mv ./wpa_supplicant-wlan0.conf ./image/etc/wpa_supplicant
 cp ./firstboot.service ./image/lib/systemd/system
 ln -s ./image/lib/systemd/system/firstboot.service ./image/etc/systemd/system/multi-user.target.wants/firstboot.service
+ln -s ./image/lib/systemd/system/wpa_supplicant-wlan0.conf ./image/etc/systemd/system/multi-user.target.wants/wpa_supplicant-wlan0.conf.service
 mv ./firstboot.sh ./image/kiosksetup
-chmod +x ./firstboot.sh
+chmod +x ./image/kiosksetup/firstboot.sh
 
 chown -R root ./image/kiosksetup
 
@@ -74,5 +75,7 @@ echo "Flashing the image. Please wait..."
 dd if="./debian.img" of="/dev/$selected_drive" bs=4M status=progress
 
 eject /dev/$selected_drive
+
+rm ./debian.img
 
 echo "You can now remove the SD-Card"
