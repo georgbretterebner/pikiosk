@@ -4,3 +4,4 @@ image/*
 boot/*
 cef-bin/*
 wpa_supplicant*
+install/kiosk.service
