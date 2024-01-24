@@ -2,3 +2,5 @@ debian.img
 firstboot.sh
 image/*
 boot/*
+cef-bin/*
+wpa_supplicant*
