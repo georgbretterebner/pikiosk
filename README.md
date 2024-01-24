@@ -4,4 +4,4 @@ Contains udev Rules and hwdb files for calibration and adjustment of 3M EXII Tou
 
 In it's current form it uses Cage compositor and Chromium Embedded Framework as the interface.
 
-To install on a RasPi, write raspbian lite to an sd card, copy all the files to a directory, plug the RasPi in and let it do it's setup process. After it has rebooted, you can log in and run the install script (requires a network connection).
+To install on a RasPi, run prepare.sh and follow the install script.
