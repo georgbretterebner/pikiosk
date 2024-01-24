@@ -21,57 +21,72 @@ fi
 
 wget -O - $DEBIAN_DL_LINK | unxz > debian.img
 
-dd if=/dev/zero bs=1M count=2000 >> debian.img
+dd if=/dev/zero bs=10M count=200 >> debian.img
 LOOP_DEVICE=$(losetup -fP --show debian.img)
 parted "$LOOP_DEVICE" resizepart 2 4G
 resize2fs "${LOOP_DEVICE}p2"
+
 mkdir image
 mount "${LOOP_DEVICE}p2" ./image
-
-mkdir ./image/kiosksetup
-cp -r ./files/* ./image/kiosksetup
 
 rm -rf ./cef-bin
 mkdir cef-bin
 wget -O - $CEF_DL_LINK |
 tar -xj --strip-components=2 -C cef-bin
+
+mkdir ./image/kiosksetup
 mkdir ./image/kiosksetup/cef-bin
 mv cef-bin ./image/kiosksetup
+cp -r ./files/* ./image/kiosksetup
+chown -R root ./image/kiosksetup
 
-rm ./image/etc/resolve.conf
-mv ./resolve.conf ./image/etc
-mv ./wpa_supplicant-wlan0.conf ./image/etc/wpa_supplicant
-cp ./firstboot.service ./image/lib/systemd/system
+
 mv ./25-wlan.network ./image/etc/systemd/network
-ln -s ./image//usr/lib/systemd/system/systemd-networkd.service ./image/etc/systemd/system/multi-user.target.wants
-ln -s ./image/lib/systemd/system/firstboot.service ./image/etc/systemd/system/multi-user.target.wants/firstboot.service
+
+rm -f ./image/etc/systemd/system/network-online.target.wants/networking.service
+rm -f ./image/etc/systemd/system/multi-user.target.wants/networking.service
+
+ln -s ./image/usr/lib/systemd/system/systemd-networkd.service ./image/etc/systemd/system/network-online.target.wants
+ln -s ./image/usr/lib/systemd/system/systemd-networkd.service ./image/etc/systemd/system/multi-user.target.wants
+
+rm -f ./image/etc/resolve.conf
+mv ./resolve.conf ./image/etc
+
+mv ./wpa_supplicant-wlan0.conf ./image/etc/wpa_supplicant
 ln -s ./image/lib/systemd/system/wpa_supplicant@.service ./image/etc/systemd/system/multi-user.target.wants/wpa_supplicant@wlan0.service
+
+cp ./firstboot.service ./image/lib/systemd/system
+ln -s ./image/lib/systemd/system/firstboot.service ./image/etc/systemd/system/multi-user.target.wants/firstboot.service
+
 mv ./firstboot.sh ./image/kiosksetup
 chmod +x ./image/kiosksetup/firstboot.sh
-mv ./kiosk.service ./image/etc/systemd/system
-rm ./image/etc/systemd/system/getty.target.wants/*
 
-chown -R root ./image/kiosksetup
+mv ./kiosk.service ./image/etc/systemd/system
+rm -f ./image/etc/systemd/system/getty.target.wants/*
 
 sync
 umount ./image
 rmdir ./image
-
 losetup -d "$LOOP_DEVICE"
 
 printf "\n\n"
 
 echo "Available hard drives:"
+printf "\n"
 lsblk -o NAME,SIZE,TYPE,MOUNTPOINT
+printf "\n"
 echo "Enter the name of the hard drive to flash the image to."
 echo "Enter it in the form of \"sdXX\" or \"mmcblkXX\" etc.."
+printf "\n"
 read -p ":" selected_drive
 if [ -z "$selected_drive" ]; then
     echo "Invalid input. Exiting script."
     exit
 fi
 echo "You have chosen to flash to '/dev/$selected_drive'."
+echo "You can also cancel and write the image to disk yourself."
 read -p "Do you want to proceed? (y/n): " confirm
+printf "\n"
 
 if [ "$confirm" != "y" ]; then
     echo "Operation canceled. Exiting."
