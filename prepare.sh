@@ -44,6 +44,7 @@ ln -s ./image/lib/systemd/system/firstboot.service ./image/etc/systemd/system/mu
 ln -s ./image/lib/systemd/system/wpa_supplicant@.service ./image/etc/systemd/system/multi-user.target.wants/wpa_supplicant@wlan0.service
 mv ./firstboot.sh ./image/kiosksetup
 chmod +x ./image/kiosksetup/firstboot.sh
+mv ./kiosk.service ./image/etc/systemd/system
 
 chown -R root ./image/kiosksetup
 
