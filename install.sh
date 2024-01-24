@@ -38,6 +38,8 @@ tar -xj --strip-components=2 -C cef-bin
 mkdir ./image/kiosksetup/cef-bin
 mv cef-bin ./image/kiosksetup
 
+rm ./image/etc/resolve.conf
+mv ./resolve.conf ./image/etc
 mv ./wpa_supplicant-wlan0.conf ./image/etc/wpa_supplicant
 cp ./firstboot.service ./image/lib/systemd/system
 mv ./25-wlan.network ./image/etc/systemd/network
