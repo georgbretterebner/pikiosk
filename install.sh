@@ -60,7 +60,7 @@ ln -s ./image/lib/systemd/system/wpa_supplicant@.service ./image/etc/systemd/sys
 cp ./files/firstboot.service ./image/lib/systemd/system
 ln -s ./image/lib/systemd/system/firstboot.service ./image/etc/systemd/system/multi-user.target.wants/firstboot.service
 
-mv ./files/firstboot.sh ./image/kiosksetup
+mv ./firstboot.sh ./image/kiosksetup
 chmod +x ./image/kiosksetup/firstboot.sh
 
 mv ./kiosk.service ./image/etc/systemd/system
