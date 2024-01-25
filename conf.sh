@@ -43,7 +43,10 @@ Gateway=$ip_gw
 DNS=$ip_dns
 EOF
 
-echo "nameserver $ip_dns" > resolv.conf
+cat <<EOF >> resolv.conf
+nameserver $ip_dns
+nameserver 1.1.1.1
+EOF
 
 fi
 
@@ -63,10 +66,18 @@ EOF
 cat <<EOF > firstboot.sh
 
 apt update && apt upgrade -y
-apt install xwayland cage sudo -y
+#apt install xwayland cage sudo polkitd libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 libxcomposite1 libxdamage1 libasound2 -y
+apt install weston xwayland chromium -y
 
 echo "Creating user 'kiosk' with home directory..."
 useradd -m kiosk
+
+echo "Copying Kiosk script"
+mv /kiosksetup/kiosk.sh /home/kiosk
+
+echo "Copying weston config"
+mkdir /home/kiosk/.config 
+mv /kiosksetup/weston.ini /home/kiosk.config
 
 echo "Creating directory /home/kiosk/cef..."
 mkdir /home/kiosk/cef
@@ -112,20 +123,6 @@ echo " avoid_warnings=1" >> /boot/config.txt
 echo " disable_splash=1" >> /boot/config.txt
 
 
-systemctl disable keyboard-setup.service
-systemctl disable dphys-swapfile.service
-systemctl disable avahi-daemon.service
-systemctl disable sys-kernel-debug.mount
-systemctl disable raspi-config.service
-systemctl disable systemd-udev-trigger.service
-systemctl disable rpi-eeprom-update.service
-systemctl disable rsyslog.service
-systemctl disable systemd-journald.service
-systemctl disable systemd-fsck-root.service
-systemctl disable systemd-logind.service
-systemctl disable bluetooth.service
-systemctl disable hciuart.service
-
 echo "$hostname" > /etc/hostname
 systemctl enable ssh
 
@@ -142,7 +139,7 @@ EOF
 cat <<EOF > kiosk.service
 
 [Unit]
-Description=Cage Kiosk
+Description=Fullscreen Kiosk
 RequiresMountsFor=/run
 After=network-online.target
 
@@ -164,7 +161,7 @@ StandardInput=tty
 StandardError=journal
 
 ExecStartPre=/bin/chvt 1
-ExecStart=/usr/bin/cage -- /home/kiosk/cef/cefsimple --url="$url"
+ExecStart=/bin/bash /home/kiosk/kiosk.sh
 
 IgnoreSIGPIPE=no
 
