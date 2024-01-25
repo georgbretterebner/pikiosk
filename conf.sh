@@ -82,22 +82,22 @@ apt install weston xwayland chromium -y
 #apt install xwayland cage sudo polkitd libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 libxcomposite1 libxdamage1 libasound2 -y
 
 
-echo "Creating user 'kiosk' with home directory..."
+echo "Creating user 'kiosk'..."
 useradd -m kiosk
 
-echo "Copying Kiosk scripts"
+echo "Copying kiosk scripts..."
 mv /kiosksetup/kiosk.sh /home/kiosk
 mv /kiosksetup/westonkiosk.sh /home/kiosk
 
-echo "Copying weston config"
+echo "Copying weston config..."
 mkdir /home/kiosk/.config 
 mv /kiosksetup/weston.ini /home/kiosk.config
 
 echo "Creating directory /home/kiosk/cef..."
 mkdir /home/kiosk/cef
 
-echo "Copying CEF binaries to /home/kiosk/cef..."
-cp -r /kiosksetup/cef-bin/* /home/kiosk/cef
+echo "Moving CEF binaries to /home/kiosk/cef..."
+mv /kiosksetup/cef-bin/* /home/kiosk/cef
 
 echo "Reloading systemd daemon..."
 systemctl daemon-reload
