@@ -76,10 +76,15 @@ EOF
 
 cat <<EOF > firstboot.sh
 
+export DEBIAN_FRONTEND=noninteractive
+
 apt update && apt upgrade -y
 
-apt install weston xwayland chromium sudo -y
-#apt install xwayland cage sudo polkitd libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 libxcomposite1 libxdamage1 libasound2 -y
+apt install kbd xwayland sudo -y
+
+apt install weston chromium -y
+
+#apt install cage polkitd libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 libxcomposite1 libxdamage1 libasound2 -y
 
 
 echo "Creating user 'kiosk'..."
