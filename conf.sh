@@ -181,7 +181,7 @@ StandardInput=tty
 StandardError=journal
 
 ExecStartPre=/bin/chvt 1
-ExecStart=/bin/bash -c /home/kiosk/kiosk.sh
+ExecStart=/bin/bash -c "/home/kiosk/kiosk.sh"
 
 IgnoreSIGPIPE=no
 
