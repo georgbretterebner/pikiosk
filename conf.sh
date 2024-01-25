@@ -74,8 +74,9 @@ apt install weston xwayland chromium -y
 echo "Creating user 'kiosk' with home directory..."
 useradd -m kiosk
 
-echo "Copying Kiosk script"
+echo "Copying Kiosk scripts"
 mv /kiosksetup/kiosk.sh /home/kiosk
+mv /kiosksetup/westonkiosk.sh /home/kiosk
 
 echo "Copying weston config"
 mkdir /home/kiosk/.config 
@@ -136,6 +137,12 @@ usermod -aG sudo $username
 rm -rf /kiosksetup
 reboot
 
+EOF
+
+cat <<EOF > westonkiosk.sh
+#!/bin/bash
+
+chromium-browser $url --touch-noise-filtering --start-fullscreen --window-size=1280,1024 --window-position=0,0 --kiosk --noerrdialogs --disable-infobars --disable-translate --no-first-run --fast --fast-start --disable-features=TranslateUI --disk-cache-dir=/dev/null  --password-store=basic
 EOF
 
 cat <<EOF > kiosk.service
