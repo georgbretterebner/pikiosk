@@ -158,7 +158,7 @@ EOF
 cat <<EOF > westonkiosk.sh
 #!/bin/bash
 
-chromium-browser $url --touch-noise-filtering --start-fullscreen --window-size=1280,1024 --window-position=0,0 --kiosk --noerrdialogs --disable-infobars --disable-translate --no-first-run --fast --fast-start --disable-features=TranslateUI --disk-cache-dir=/dev/null  --password-store=basic
+chromium $url --touch-noise-filtering --start-fullscreen --window-size=1280,1024 --window-position=0,0 --kiosk --noerrdialogs --disable-infobars --disable-translate --no-first-run --fast --fast-start --disable-features=TranslateUI --disk-cache-dir=/dev/null  --password-store=basic
 EOF
 
 cat <<EOF > kiosk.service
