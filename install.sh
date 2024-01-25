@@ -57,10 +57,10 @@ ln -s ./image/usr/lib/systemd/system/systemd-networkd.service ./image/etc/system
 mv ./wpa_supplicant-wlan0.conf ./image/etc/wpa_supplicant
 ln -s ./image/lib/systemd/system/wpa_supplicant@.service ./image/etc/systemd/system/multi-user.target.wants/wpa_supplicant@wlan0.service
 
-cp ./firstboot.service ./image/lib/systemd/system
+cp ./files/firstboot.service ./image/lib/systemd/system
 ln -s ./image/lib/systemd/system/firstboot.service ./image/etc/systemd/system/multi-user.target.wants/firstboot.service
 
-mv ./firstboot.sh ./image/kiosksetup
+mv ./files/firstboot.sh ./image/kiosksetup
 chmod +x ./image/kiosksetup/firstboot.sh
 
 mv ./kiosk.service ./image/etc/systemd/system
