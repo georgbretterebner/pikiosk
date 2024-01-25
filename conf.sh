@@ -1,19 +1,32 @@
 #!/bin/bash
 
-read -p "Enter username: " username
-read -s -p "Enter password: " password
-echo
-read -p "Enter your WiFi SSID: " wifi_ssid
-read -s -p "Enter your WiFi password: " wifi_password
-echo
-read -p "Enter hostname: " hostname
-read -p "Enter webpage to display on kiosk: " url
-echo "Enter IP Address and Subnet-Mask in \"1.2.3.4/24\" format. "
-read -p "Leave Empty for DHCP. IP: " ip_addr
+source secrets.sh
+
+if [ -z "$username" ] || [ -z "$password" ] || [ -z "$wifi_ssid" ] || [ -z "$wifi_password" ] || [ -z "$hostname" ]  || [ -z "$ip_addr" ]; then
+
+  read -p "Enter username: " username
+  read -s -p "Enter password: " password
+  echo
+  read -p "Enter your WiFi SSID: " wifi_ssid
+  read -s -p "Enter your WiFi password: " wifi_password
+  echo
+  read -p "Enter hostname: " hostname
+  read -p "Enter webpage to display on kiosk: " url
+  echo "Enter IP Address and Subnet-Mask in \"1.2.3.4/24\" format. "
+  read -p "Leave Empty for DHCP. IP: " ip_addr
+
+  if [ -z "$ip_addr" ]; then
+    echo "Using DHCP"
+  else
+    read -p "Enter Gateway IP: " ip_gw
+    read -p "Enter DNS Server IP: " ip_dns
+  fi
+
+fi
 
 if [ -z "$username" ] || [ -z "$password" ] || [ -z "$wifi_ssid" ] || [ -z "$wifi_password" ] || [ -z "$hostname" ]; then
-    echo "Invalid input. Exiting script."
-    exit 1
+  echo "Invalid input. Exiting script."
+  exit 1
 fi
 
 cat <<EOF > 25-wlan.network
@@ -23,7 +36,6 @@ Name=wlan0
 EOF
 
 if [ -z "$ip_addr" ]; then
-  echo "Using DHCP"
 
 cat <<EOF >> 25-wlan.network
 [Network]
@@ -33,8 +45,6 @@ EOF
 echo "nameserver 1.1.1.1" > resolv.conf
 
 else
-  read -p "Enter Gateway IP: " ip_gw
-  read -p "Enter DNS Server IP: " ip_dns
   
 cat <<EOF >> 25-wlan.network
 [Network]
