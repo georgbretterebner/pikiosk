@@ -42,15 +42,17 @@ chown -R root ./image/kiosksetup
 
 
 mv ./25-wlan.network ./image/etc/systemd/network
+mv ./resolv.conf ./image/etc
 
 rm -f ./image/etc/systemd/system/network-online.target.wants/networking.service
 rm -f ./image/etc/systemd/system/multi-user.target.wants/networking.service
 
+mv ./image/etc/network/interfaces ./image/etc/network/interfaces.save
+mv ./image/etc/network/interfaces.d ./image/etc/network/interfaces.d.save
+
 ln -s ./image/usr/lib/systemd/system/systemd-networkd.service ./image/etc/systemd/system/network-online.target.wants
 ln -s ./image/usr/lib/systemd/system/systemd-networkd.service ./image/etc/systemd/system/multi-user.target.wants
 
-cat ./resolve.conf >> ./image/etc/resolve.conf
-rm -f ./resolve.conf
 
 mv ./wpa_supplicant-wlan0.conf ./image/etc/wpa_supplicant
 ln -s ./image/lib/systemd/system/wpa_supplicant@.service ./image/etc/systemd/system/multi-user.target.wants/wpa_supplicant@wlan0.service
@@ -94,7 +96,7 @@ if [ "$confirm" != "y" ]; then
 fi
 echo "Flashing the image. Please wait..."
 dd if="./debian.img" of="/dev/$selected_drive" bs=4M status=progress
-
+sync
 eject /dev/$selected_drive
 
 rm ./debian.img

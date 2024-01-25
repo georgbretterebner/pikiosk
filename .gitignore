@@ -6,3 +6,4 @@ cef-bin/*
 wpa_supplicant*
 kiosk.service
 *wlan.network
+resolv.conf

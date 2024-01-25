@@ -1,48 +1,74 @@
 #!/bin/bash
 
-read -p "Enter username: " username
-read -s -p "Enter password: " password
-echo
-read -p "Enter your WiFi SSID: " wifi_ssid
-read -s -p "Enter your WiFi password: " wifi_password
-echo
-read -p "Enter hostname: " hostname
-read -p "Enter webpage to display on kiosk: " url
-echo "Enter IP Address and Subnet-Mask in \"1.2.3.4/24\" format. "
-read -p "Leave Empty for DHCP. IP: " ip_addr
+#read -p "Enter username: " username
+#read -s -p "Enter password: " password
+#echo
+#read -p "Enter your WiFi SSID: " wifi_ssid
+#read -s -p "Enter your WiFi password: " wifi_password
+#echo
+#read -p "Enter hostname: " hostname
+#read -p "Enter webpage to display on kiosk: " url
+#echo "Enter IP Address and Subnet-Mask in \"1.2.3.4/24\" format. "
+#read -p "Leave Empty for DHCP. IP: " ip_addr
 
-if [ -z "$username" ] || [ -z "$password" ] || [ -z "$wifi_ssid" ] || [ -z "$wifi_password" ] || [ -z "$hostname" ]; then
-    echo "Invalid input. Exiting script."
-    exit 1
-fi
+username="r3"
+password="r3alraum"
+wifi_ssid="realraum"
+wifi_password="r3alraum"
+hostname="touchme"
+url="homeassistant.realraum.at"
+ip_addr="192.168.127.248/24"
+ip_gw="192.168.127.254"
+ip_dns="192.168.127.254"
+
+#if [ -z "$username" ] || [ -z "$password" ] || [ -z "$wifi_ssid" ] || [ -z "$wifi_password" ] || [ -z "$hostname" ]; then
+#    echo "Invalid input. Exiting script."
+#    exit 1
+#fi
 
 cat <<EOF > 25-wlan.network
-
 [Match]
 Name=wlan0
 
-[Network]
-DHCP=ipv4
-
 EOF
-
-echo "nameserver 1.1.1.1" > resolve.conf
 
 if [ -z "$ip_addr" ]; then
   echo "Using DHCP"
+
+cat <<EOF >> 25-wlan.network
+[Network]
+DHCP=ipv4
+EOF
+
+echo "nameserver 1.1.1.1" > resolv.conf
+
 else
-  read -p "Enter Gateway IP: " ip_gw
-  read -p "Enter DNS Server IP: " ip_dns
+#  read -p "Enter Gateway IP: " ip_gw
+#  read -p "Enter DNS Server IP: " ip_dns
   
 cat <<EOF >> 25-wlan.network
-
+[Network]
 Address=$ip_addr
 Gateway=$ip_gw
 DNS=$ip_dns
-
 EOF
 
+echo "nameserver $ip_dns" > resolv.conf
+
 fi
+
+cat <<EOF > wpa_supplicant-wlan0.conf
+ctrl_interface=/run/wpa_supplicant
+ctrl_interface_group=netdev
+update_config=1
+
+country=AT
+
+network={
+    ssid="$wifi_ssid"
+    psk="$wifi_password"
+}
+EOF
 
 cat <<EOF > firstboot.sh
 
@@ -103,19 +129,6 @@ usermod -aG sudo $username
 rm -rf /kiosksetup
 reboot
 
-EOF
-
-cat <<EOF > wpa_supplicant-wlan0.conf
-ctrl_interface=/run/wpa_supplicant
-ctrl_interface_group=netdev
-update_config=1
-
-country=AT
-
-network={
-    ssid="$wifi_ssid"
-    psk="$wifi_password"
-}
 EOF
 
 cat <<EOF > kiosk.service
