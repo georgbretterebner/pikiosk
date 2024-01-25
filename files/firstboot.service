@@ -1,7 +1,6 @@
 [Unit]
 Description=FirstBoot
 After=network.target
-Before=multi-user.target
 ConditionFileNotEmpty=/kiosksetup/firstboot.sh
 
 [Service]
@@ -10,7 +9,6 @@ TTYPath=/dev/tty1
 TTYVHangup=yes
 TTYVTDisallocate=yes
 StandardOutput=tty-force
-StandardInput=null
 StandardError=tty-force
 
 ExecStart=/bin/bash -c "/kiosksetup/firstboot.sh"
