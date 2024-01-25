@@ -78,7 +78,7 @@ cat <<EOF > firstboot.sh
 
 apt update && apt upgrade -y
 
-apt install weston xwayland chromium -y
+apt install weston xwayland chromium sudo -y
 #apt install xwayland cage sudo polkitd libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 libxcomposite1 libxdamage1 libasound2 -y
 
 
@@ -181,7 +181,7 @@ StandardInput=tty
 StandardError=journal
 
 ExecStartPre=/bin/chvt 1
-ExecStart=/bin/bash /home/kiosk/kiosk.sh
+ExecStart=/bin/bash -c /home/kiosk/kiosk.sh
 
 IgnoreSIGPIPE=no
 
