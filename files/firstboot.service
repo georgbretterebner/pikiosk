@@ -9,6 +9,7 @@ TTYPath=/dev/tty1
 TTYVHangup=yes
 TTYVTDisallocate=yes
 StandardOutput=tty-force
+StandardInput=tty-force
 StandardError=tty-force
 
 ExecStart=/bin/bash -c "/kiosksetup/firstboot.sh"
