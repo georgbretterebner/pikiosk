@@ -65,26 +65,52 @@ cat <<EOF > firstboot.sh
 apt update && apt upgrade -y
 apt install xwayland cage sudo -y
 
+echo "Creating user 'kiosk' with home directory..."
 useradd -m kiosk
+
+echo "Creating directory /home/kiosk/cef..."
 mkdir /home/kiosk/cef
+
+echo "Copying CEF binaries to /home/kiosk/cef..."
 cp -r /kiosksetup/cef-bin/* /home/kiosk/cef
+
+echo "Reloading systemd daemon..."
 systemctl daemon-reload
+
+echo "Enabling kiosk service..."
 systemctl enable kiosk.service
+
+echo "Copying hardware database files..."
 cp /kiosksetup/61-evdev-local.hwdb /etc/udev/hwdb.d
 cp /kiosksetup/99-touch-mirror.rules /etc/udev/rules.d
+
+echo "Creating symbolic link to override libinput rules..."
 ln -sf /dev/null /etc/udev/rules.d/90-libinput-fuzz-override.rules
+
+echo "Updating hardware database..."
 systemd-hwdb update
+
+echo "Disabling getty service..."
 systemctl disable getty@.service
+
+echo "Changing ownership of /home/kiosk to user 'kiosk'..."
 chown -R kiosk /home/kiosk
 
+echo "Removing Adwaita cursor icons..."
 rm -rf /usr/share/icons/Adwaita/cursors/*
+
+echo "Copying custom cursor left_ptr to /usr/share/icons/Adwaita/cursors..."
 cp /kiosksetup/left_ptr /usr/share/icons/Adwaita/cursors
 
+echo "Setting logind configuration options..."
 echo "NAutoVTs=0" >> /etc/systemd/logind.conf
 echo "ReserveVT=10" >> /etc/systemd/logind.conf
+
+echo "Updating boot command line options..."
 echo " quiet nosplash loglevel=0 vt.global_cursor_default=0" >> /boot/cmdline.txt
 echo " avoid_warnings=1" >> /boot/config.txt
 echo " disable_splash=1" >> /boot/config.txt
+
 
 systemctl disable keyboard-setup.service
 systemctl disable dphys-swapfile.service
