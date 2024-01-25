@@ -1,7 +1,6 @@
 #!/bin/bash
 
 ./rmconf.sh &> /dev/null
-
 source secrets.sh &> /dev/null
 
 if [ -z "$username" ] || [ -z "$password" ] || [ -z "$wifi_ssid" ] || [ -z "$wifi_password" ] || [ -z "$hostname" ]  || [ -z "$ip_addr" ]; then
