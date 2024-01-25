@@ -96,7 +96,7 @@ mv /kiosksetup/westonkiosk.sh /home/kiosk
 
 echo "Copying weston config..."
 mkdir /home/kiosk/.config 
-mv /kiosksetup/weston.ini /home/kiosk.config
+mv /kiosksetup/weston.ini /home/kiosk/.config
 
 echo "Creating directory /home/kiosk/cef..."
 mkdir /home/kiosk/cef
@@ -111,8 +111,8 @@ echo "Enabling kiosk service..."
 systemctl enable kiosk.service
 
 echo "Copying hardware database files..."
-cp /kiosksetup/61-evdev-local.hwdb /etc/udev/hwdb.d
-cp /kiosksetup/99-touch-mirror.rules /etc/udev/rules.d
+mv /kiosksetup/61-evdev-local.hwdb /etc/udev/hwdb.d
+mv /kiosksetup/99-touch-mirror.rules /etc/udev/rules.d
 
 echo "Creating symbolic link to override libinput rules..."
 ln -sf /dev/null /etc/udev/rules.d/90-libinput-fuzz-override.rules
@@ -130,7 +130,7 @@ echo "Removing Adwaita cursor icons..."
 rm -rf /usr/share/icons/Adwaita/cursors/*
 
 echo "Copying custom cursor left_ptr to /usr/share/icons/Adwaita/cursors..."
-cp /kiosksetup/left_ptr /usr/share/icons/Adwaita/cursors
+mv /kiosksetup/left_ptr /usr/share/icons/Adwaita/cursors
 
 echo "Setting logind configuration options..."
 echo "NAutoVTs=0" >> /etc/systemd/logind.conf
