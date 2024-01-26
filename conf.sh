@@ -80,7 +80,7 @@ cat <<EOF > firstboot.sh
 export DEBIAN_FRONTEND=noninteractive
 
 apt update && apt upgrade -y
-apt install kbd cog sudo -y
+apt install kbd cog sudo libgles2 -y
 
 echo "Creating user 'kiosk'..."
 useradd -m kiosk
@@ -114,9 +114,9 @@ echo "NAutoVTs=0" >> /etc/systemd/logind.conf
 echo "ReserveVT=10" >> /etc/systemd/logind.conf
 
 echo "Updating boot command line options..."
-echo " quiet nosplash loglevel=0 vt.global_cursor_default=0" >> /boot/cmdline.txt
-echo " avoid_warnings=1" >> /boot/config.txt
-echo " disable_splash=1" >> /boot/config.txt
+echo " quiet nosplash loglevel=0 vt.global_cursor_default=0" | tee -a /boot/cmdline.txt
+echo "avoid_warnings=1" | tee -a /boot/config.txt
+echo "disable_splash=1" | tee -a /boot/config.txt
 
 echo "$hostname" > /etc/hostname
 systemctl enable ssh
@@ -125,7 +125,7 @@ passwd -l root
 useradd -m $username
 echo '$username:$password' | chpasswd
 usermod -aG sudo $username
-chsh -s /bin/bash
+chsh r3 -s /bin/bash
 
 rm -rf /kiosksetup
 reboot
