@@ -125,6 +125,7 @@ passwd -l root
 useradd -m $username
 echo '$username:$password' | chpasswd
 usermod -aG sudo $username
+chsh -s /bin/bash
 
 rm -rf /kiosksetup
 reboot
