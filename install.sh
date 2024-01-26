@@ -66,9 +66,6 @@ chmod +x ./image/kiosksetup/firstboot.sh
 mv ./kiosk.service ./image/etc/systemd/system
 rm -f ./image/etc/systemd/system/getty.target.wants/*
 
-mv ./westonkiosk.sh ./image/kiosksetup
-chmod +x ./image/kiosksetup/westonkiosk.sh
-
 sync
 umount ./image
 rmdir ./image

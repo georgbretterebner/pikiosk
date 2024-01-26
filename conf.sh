@@ -30,6 +30,7 @@ if [ -z "$username" ] || [ -z "$password" ] || [ -z "$wifi_ssid" ] || [ -z "$wif
   exit 1
 fi
 
+
 cat <<EOF > 25-wlan.network
 [Match]
 Name=wlan0
@@ -79,30 +80,12 @@ cat <<EOF > firstboot.sh
 export DEBIAN_FRONTEND=noninteractive
 
 apt update && apt upgrade -y
-
-apt install kbd xwayland sudo -y
-
-apt install weston chromium -y
-
-#apt install cage polkitd libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 libxcomposite1 libxdamage1 libasound2 -y
-
+apt install kbd cog sudo -y
 
 echo "Creating user 'kiosk'..."
 useradd -m kiosk
-
-echo "Copying kiosk scripts..."
-mv /kiosksetup/kiosk.sh /home/kiosk
-mv /kiosksetup/westonkiosk.sh /home/kiosk
-
-echo "Copying weston config..."
-mkdir /home/kiosk/.config 
-mv /kiosksetup/weston.ini /home/kiosk/.config
-
-echo "Creating directory /home/kiosk/cef..."
-mkdir /home/kiosk/cef
-
-echo "Moving CEF binaries to /home/kiosk/cef..."
-mv /kiosksetup/cef-bin/* /home/kiosk/cef
+usermod -aG video kiosk
+usermod -aG input kiosk
 
 echo "Reloading systemd daemon..."
 systemctl daemon-reload
@@ -126,12 +109,6 @@ systemctl disable getty@.service
 echo "Changing ownership of /home/kiosk to user 'kiosk'..."
 chown -R kiosk /home/kiosk
 
-echo "Removing Adwaita cursor icons..."
-rm -rf /usr/share/icons/Adwaita/cursors/*
-
-echo "Copying custom cursor left_ptr to /usr/share/icons/Adwaita/cursors..."
-mv /kiosksetup/left_ptr /usr/share/icons/Adwaita/cursors
-
 echo "Setting logind configuration options..."
 echo "NAutoVTs=0" >> /etc/systemd/logind.conf
 echo "ReserveVT=10" >> /etc/systemd/logind.conf
@@ -140,7 +117,6 @@ echo "Updating boot command line options..."
 echo " quiet nosplash loglevel=0 vt.global_cursor_default=0" >> /boot/cmdline.txt
 echo " avoid_warnings=1" >> /boot/config.txt
 echo " disable_splash=1" >> /boot/config.txt
-
 
 echo "$hostname" > /etc/hostname
 systemctl enable ssh
@@ -153,12 +129,6 @@ usermod -aG sudo $username
 rm -rf /kiosksetup
 reboot
 
-EOF
-
-cat <<EOF > westonkiosk.sh
-#!/bin/bash
-
-chromium $url --touch-noise-filtering --start-fullscreen --window-size=1280,1024 --window-position=0,0 --kiosk --noerrdialogs --disable-infobars --disable-translate --no-first-run --fast --fast-start --disable-features=TranslateUI --disk-cache-dir=/dev/null  --password-store=basic
 EOF
 
 cat <<EOF > kiosk.service
@@ -186,7 +156,7 @@ StandardInput=tty
 StandardError=journal
 
 ExecStartPre=/bin/chvt 1
-ExecStart=/bin/bash -c "/home/kiosk/kiosk.sh"
+ExecStart=/usr/bin/cog $url
 
 IgnoreSIGPIPE=no
 
