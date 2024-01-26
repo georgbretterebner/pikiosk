@@ -79,9 +79,6 @@ cat <<EOF > firstboot.sh
 
 export DEBIAN_FRONTEND=noninteractive
 
-apt update && apt upgrade -y
-apt install kbd cog sudo libgles2 -y
-
 echo "Creating user 'kiosk'..."
 useradd -m kiosk
 usermod -aG video kiosk
@@ -128,6 +125,10 @@ usermod -aG sudo $username
 chsh r3 -s /bin/bash
 
 rm -rf /kiosksetup
+
+apt update && apt upgrade -y
+apt install kbd cog sudo libgles2 -y
+
 reboot
 
 EOF
