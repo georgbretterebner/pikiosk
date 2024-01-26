@@ -7,5 +7,5 @@ wpa_supplicant*
 kiosk.service
 *wlan.network
 resolv.conf
-secrets.sh
+secrets
 westonkiosk.sh
