@@ -33,7 +33,8 @@ fi
 cat <<EOF > kiosk.sh
 #!/bin/bash
 
-cog $url
+#cog $url
+chromium-browser $url --touch-noise-filtering --start-fullscreen --window-size=1280,1024 --window-position=0,0 --kiosk --noerrdialogs --disable-infobars --disable-translate --no-first-run --fast --fast-start --disable-features=TranslateUI --disk-cache-dir=/dev/null  --password-store=basic
 EOF
 
 cat <<EOF > 25-wlan.network
@@ -138,7 +139,7 @@ rm -rf /kiosksetup
 
 apt update && apt upgrade -y
 
-apt install weston cog -y
+apt install weston cog chromium-browser -y
 #apt install kbd cog sudo libgles2 weston -y
 
 reboot
