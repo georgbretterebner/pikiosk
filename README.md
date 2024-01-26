@@ -5,8 +5,7 @@ Pi Kiosk - A collection of files and scripts to use a RasPi as a Kiosk device fo
 
 Contains udev Rules and hwdb files for calibration and adjustment of 3M EXII Touch controller that we have lying around and use as a control dashboard.
 
-<del>In it's current form it uses Cage compositor and Chromium Embedded Framework as the interface.</del>
-Actually we're back to weston/chromium for now, lol.
+In it's current form it uses the Cog project (an implementation of webkitwpe) without a compositor, directly using drm.
 
 To install on a RasPi, insert an SD-Card run install.sh and follow the install script.
 
