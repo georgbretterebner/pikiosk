@@ -139,7 +139,7 @@ rm -rf /kiosksetup
 
 apt update && apt upgrade -y
 
-apt install weston cog chromium-browser -y
+apt install xwayland weston cog chromium-browser -y
 #apt install kbd cog sudo libgles2 weston -y
 
 reboot
