@@ -1,6 +1,7 @@
 #!/bin/bash
 
-DEBIAN_DL_LINK="https://raspi.debian.net/daily/raspi_3_bookworm.img.xz"
+#DEBIAN_DL_LINK="https://raspi.debian.net/daily/raspi_3_bookworm.img.xz"
+DEBIAN_DL_LINK="https://downloads.raspberrypi.com/raspios_lite_arm64/images/raspios_lite_arm64-2023-12-11/2023-12-11-raspios-bookworm-arm64-lite.img.xz"
 
 if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
@@ -33,21 +34,24 @@ mkdir ./image/kiosksetup
 cp -r ./files/* ./image/kiosksetup
 chown -R root ./image/kiosksetup
 
-mv ./westonkiosk.sh ./image/kiosksetup
-chmod +x ./image/kiosksetup/westonkiosk.sh
+mv ./kiosk.sh ./image/kiosksetup
+chmod +x ./image/kiosksetup/kiosk.sh
 
 mv ./25-wlan.network ./image/etc/systemd/network
+rm -f ./image/etc/resolv.conf
 mv ./resolv.conf ./image/etc
 
-rm -f ./image/etc/systemd/system/network-online.target.wants/networking.service
-rm -f ./image/etc/systemd/system/multi-user.target.wants/networking.service
+#rm -f ./image/etc/systemd/system/network-online.target.wants/networking.service
+#rm -f ./image/etc/systemd/system/multi-user.target.wants/networking.service
 
-mv ./image/etc/network/interfaces ./image/etc/network/interfaces.save
-mv ./image/etc/network/interfaces.d ./image/etc/network/interfaces.d.save
+#mv ./image/etc/network/interfaces ./image/etc/network/interfaces.save
+#mv ./image/etc/network/interfaces.d ./image/etc/network/interfaces.d.save
+
+rm -f ./image/etc/systemd/system/network-online.target.wants/*
+rm -f ./image/etc/systemd/system/multi-user.target.wants/*
 
 ln -s ./image/usr/lib/systemd/system/systemd-networkd.service ./image/etc/systemd/system/network-online.target.wants
 ln -s ./image/usr/lib/systemd/system/systemd-networkd.service ./image/etc/systemd/system/multi-user.target.wants
-
 
 mv ./wpa_supplicant-wlan0.conf ./image/etc/wpa_supplicant
 ln -s ./image/lib/systemd/system/wpa_supplicant@.service ./image/etc/systemd/system/multi-user.target.wants/wpa_supplicant@wlan0.service
@@ -59,7 +63,7 @@ mv ./firstboot.sh ./image/kiosksetup
 chmod +x ./image/kiosksetup/firstboot.sh
 
 mv ./kiosk.service ./image/etc/systemd/system
-rm -f ./image/etc/systemd/system/getty.target.wants/*
+#rm -f ./image/etc/systemd/system/getty.target.wants/*
 
 sync
 umount ./image

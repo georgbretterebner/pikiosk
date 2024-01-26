@@ -30,7 +30,7 @@ if [ -z "$username" ] || [ -z "$password" ] || [ -z "$wifi_ssid" ] || [ -z "$wif
   exit 1
 fi
 
-cat <<EOF > westonkiosk.sh
+cat <<EOF > kiosk.sh
 #!/bin/bash
 
 cog $url
@@ -84,13 +84,20 @@ cat <<EOF > firstboot.sh
 
 export DEBIAN_FRONTEND=noninteractive
 
+echo "Unblocking wifi"
+rfkill unblock all
+
 echo "Creating user 'kiosk'..."
 useradd -m kiosk
 usermod -aG video kiosk
 usermod -aG input kiosk
 
+echo "Copying Kiosk config"
+mkdir /home/kiosk/.config
+mv /kiosksetup/weston.ini /home/kiosk/.config
+
 echo "Copying Kiosk scripts"
-mv /kiosksetup/westonkiosk.sh /home/kiosk
+mv /kiosksetup/kiosk.sh /home/kiosk
 
 echo "Reloading systemd daemon..."
 systemctl daemon-reload
@@ -130,7 +137,9 @@ chsh r3 -s /bin/bash
 rm -rf /kiosksetup
 
 apt update && apt upgrade -y
-apt install kbd cog sudo libgles2 weston -y
+
+apt install weston cog -y
+#apt install kbd cog sudo libgles2 weston -y
 
 reboot
 
@@ -161,7 +170,7 @@ StandardInput=tty
 StandardError=journal
 
 ExecStartPre=/bin/chvt 1
-ExecStart=/usr/bin/cog $url
+ExecStart=/home/kiosk/kiosk.sh
 
 IgnoreSIGPIPE=no
 
