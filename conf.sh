@@ -30,6 +30,11 @@ if [ -z "$username" ] || [ -z "$password" ] || [ -z "$wifi_ssid" ] || [ -z "$wif
   exit 1
 fi
 
+cat <<EOF > westonkiosk.sh
+#!/bin/bash
+
+cog $url
+EOF
 
 cat <<EOF > 25-wlan.network
 [Match]
@@ -84,6 +89,9 @@ useradd -m kiosk
 usermod -aG video kiosk
 usermod -aG input kiosk
 
+echo "Copying Kiosk scripts"
+mv /kiosksetup/westonkiosk.sh /home/kiosk
+
 echo "Reloading systemd daemon..."
 systemctl daemon-reload
 
@@ -122,7 +130,7 @@ chsh r3 -s /bin/bash
 rm -rf /kiosksetup
 
 apt update && apt upgrade -y
-apt install kbd cog sudo libgles2 -y
+apt install kbd cog sudo libgles2 weston -y
 
 reboot
 

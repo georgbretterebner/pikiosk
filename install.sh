@@ -21,6 +21,8 @@ mkdir ./image/kiosksetup
 cp -r ./files/* ./image/kiosksetup
 chown -R root ./image/kiosksetup
 
+mv ./westonkiosk.sh ./image/kiosksetup
+chmod +x ./image/kiosksetup/westonkiosk.sh
 
 mv ./25-wlan.network ./image/etc/systemd/network
 mv ./resolv.conf ./image/etc
