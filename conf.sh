@@ -110,11 +110,6 @@ echo "Setting logind configuration options..."
 echo "NAutoVTs=0" >> /etc/systemd/logind.conf
 echo "ReserveVT=10" >> /etc/systemd/logind.conf
 
-echo "Updating boot command line options..."
-echo " quiet nosplash loglevel=0 vt.global_cursor_default=0" | tee -a /boot/cmdline.txt
-echo "avoid_warnings=1" | tee -a /boot/config.txt
-echo "disable_splash=1" | tee -a /boot/config.txt
-
 echo "$hostname" > /etc/hostname
 systemctl enable ssh
 

@@ -1,10 +1,6 @@
 #!/bin/bash
 
-# For latest debian download please go to
-# https://raspi.debian.net/daily-images/
-# and copy the desired Link.
 DEBIAN_DL_LINK="https://raspi.debian.net/daily/raspi_3_bookworm.img.xz"
-
 
 if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
