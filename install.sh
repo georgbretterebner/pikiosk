@@ -13,7 +13,8 @@ fi
 
 ./conf.sh
 
-wget -O - $DEBIAN_DL_LINK | unxz > debian.img
+echo "Downloading debian image..."
+wget -nv --show-progress -O - $DEBIAN_DL_LINK | unxz > debian.img
 
 LOOP_DEVICE=$(losetup -fP --show debian.img)
 
