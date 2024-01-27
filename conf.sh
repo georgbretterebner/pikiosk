@@ -139,8 +139,7 @@ rm -rf /kiosksetup
 
 apt update && apt upgrade -y
 
-apt install xwayland weston cog chromium-browser -y
-#apt install kbd cog sudo libgles2 weston -y
+apt install weston xwayland chromium-browser cog libgles2 -y
 
 reboot
 
@@ -171,7 +170,7 @@ StandardInput=tty
 StandardError=journal
 
 ExecStartPre=/bin/chvt 1
-ExecStart=/home/kiosk/kiosk.sh
+ExecStart=weston
 
 IgnoreSIGPIPE=no
 
