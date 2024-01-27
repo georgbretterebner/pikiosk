@@ -30,10 +30,11 @@ if [ -z "$username" ] || [ -z "$password" ] || [ -z "$wifi_ssid" ] || [ -z "$wif
   exit 1
 fi
 
-cat <<EOF > westonkiosk.sh
+cat <<EOF > kiosk.sh
 #!/bin/bash
 
-cog $url
+#cog $url
+chromium-browser $url --touch-noise-filtering --start-fullscreen --window-size=1280,1024 --window-position=0,0 --kiosk --noerrdialogs --disable-infobars --disable-translate --no-first-run --fast --fast-start --disable-features=TranslateUI --disk-cache-dir=/dev/null  --password-store=basic
 EOF
 
 cat <<EOF > 25-wlan.network
@@ -84,13 +85,20 @@ cat <<EOF > firstboot.sh
 
 export DEBIAN_FRONTEND=noninteractive
 
+echo "Unblocking wifi"
+rfkill unblock all
+
 echo "Creating user 'kiosk'..."
 useradd -m kiosk
 usermod -aG video kiosk
 usermod -aG input kiosk
 
+echo "Copying Kiosk config"
+mkdir /home/kiosk/.config
+mv /kiosksetup/weston.ini /home/kiosk/.config
+
 echo "Copying Kiosk scripts"
-mv /kiosksetup/westonkiosk.sh /home/kiosk
+mv /kiosksetup/kiosk.sh /home/kiosk
 
 echo "Reloading systemd daemon..."
 systemctl daemon-reload
@@ -130,7 +138,8 @@ chsh r3 -s /bin/bash
 rm -rf /kiosksetup
 
 apt update && apt upgrade -y
-apt install kbd cog sudo libgles2 weston -y
+
+apt install weston xwayland chromium-browser cog libgles2 -y
 
 reboot
 
@@ -161,7 +170,7 @@ StandardInput=tty
 StandardError=journal
 
 ExecStartPre=/bin/chvt 1
-ExecStart=/usr/bin/cog $url
+ExecStart=weston
 
 IgnoreSIGPIPE=no
 
