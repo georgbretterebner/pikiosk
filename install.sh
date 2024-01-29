@@ -18,11 +18,6 @@ LOOP_DEVICE=$(losetup -fP --show debian.img)
 mkdir boot
 mount "${LOOP_DEVICE}p1" ./boot
 
-echo "avoid_warnings=1" >> ./boot/config.txt
-echo "disable_splash=1" >> ./boot/config.txt
-
-sed -i 's/$/ \*quiet nosplash loglevel=0 vt.global_cursor_default=0\*/' ./boot/cmdline.txt
-
 sync
 umount ./boot
 rmdir ./boot

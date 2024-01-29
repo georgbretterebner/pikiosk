@@ -141,6 +141,11 @@ apt update && apt upgrade -y
 
 apt install weston xwayland chromium-browser cog libgles2 -y
 
+echo "avoid_warnings=1" >> /boot/config.txt
+echo "disable_splash=1" >> /boot/config.txt
+
+sed -i 's/$/ \*quiet nosplash loglevel=0 vt.global_cursor_default=0\*/' /boot/cmdline.txt
+
 reboot
 
 EOF
