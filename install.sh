@@ -1,7 +1,6 @@
 #!/bin/bash
 
-#DEBIAN_DL_LINK="https://raspi.debian.net/daily/raspi_3_bookworm.img.xz"
-DEBIAN_DL_LINK="https://downloads.raspberrypi.com/raspios_lite_arm64/images/raspios_lite_arm64-2023-12-11/2023-12-11-raspios-bookworm-arm64-lite.img.xz"
+DEBIAN_DL_LINK="https://downloads.raspberrypi.com/raspios_oldstable_lite_armhf/images/raspios_oldstable_lite_armhf-2023-12-06/2023-12-05-raspios-bullseye-armhf-lite.img.xz"
 
 if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
@@ -36,11 +35,8 @@ mv ./25-wlan.network ./image/etc/systemd/network
 rm -f ./image/etc/resolv.conf
 mv ./resolv.conf ./image/etc
 
-#rm -f ./image/etc/systemd/system/network-online.target.wants/networking.service
-#rm -f ./image/etc/systemd/system/multi-user.target.wants/networking.service
-
-#mv ./image/etc/network/interfaces ./image/etc/network/interfaces.save
-#mv ./image/etc/network/interfaces.d ./image/etc/network/interfaces.d.save
+mv ./image/etc/network/interfaces ./image/etc/network/interfaces.save
+mv ./image/etc/network/interfaces.d ./image/etc/network/interfaces.d.save
 
 rm -f ./image/etc/systemd/system/network-online.target.wants/*
 rm -f ./image/etc/systemd/system/multi-user.target.wants/*

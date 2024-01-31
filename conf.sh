@@ -139,7 +139,7 @@ rm -rf /kiosksetup
 
 apt update && apt upgrade -y
 
-apt install weston xwayland chromium-browser cog libgles2 -y
+apt install weston xwayland chromium-browser -y
 
 echo "avoid_warnings=1" >> /boot/config.txt
 echo "disable_splash=1" >> /boot/config.txt
