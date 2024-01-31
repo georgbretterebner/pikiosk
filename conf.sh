@@ -146,6 +146,9 @@ echo "disable_splash=1" >> /boot/config.txt
 
 sed -i 's/$/ \*quiet nosplash loglevel=0 vt.global_cursor_default=0\*/' /boot/cmdline.txt
 
+rm -rf /usr/share/icons/Adwaita/cursors/*
+cp /kiosksetup/left_ptr /usr/share/icons/Adwaita/cursors
+
 reboot
 
 EOF
