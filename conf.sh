@@ -120,13 +120,6 @@ systemctl disable getty@.service
 echo "Changing ownership of /home/kiosk to user 'kiosk'..."
 chown -R kiosk /home/kiosk
 
-rm -rf /usr/share/icons/Adwaita/cursors/*
-cp /kiosksetup/left_ptr /usr/share/icons/Adwaita/cursors
-
-echo "Setting logind configuration options..."
-echo "NAutoVTs=0" >> /etc/systemd/logind.conf
-echo "ReserveVT=10" >> /etc/systemd/logind.conf
-
 echo "$hostname" > /etc/hostname
 systemctl enable ssh
 
@@ -141,8 +134,16 @@ apt upgrade -y
 
 apt install weston xwayland chromium-browser -y
 
+echo "Setting logind configuration options..."
+echo "NAutoVTs=0" >> /etc/systemd/logind.conf
+echo "ReserveVT=10" >> /etc/systemd/logind.conf
+
+rm -rf /usr/share/icons/Adwaita/cursors/*
+cp /kiosksetup/left_ptr /usr/share/icons/Adwaita/cursors
+
 echo "avoid_warnings=1" >> /boot/config.txt
 echo "disable_splash=1" >> /boot/config.txt
+echo "gpu_mem=256" >> /boot/config.txt
 
 sed -i 's/$/ \*quiet nosplash loglevel=0 vt.global_cursor_default=0\*/' /boot/cmdline.txt
 
