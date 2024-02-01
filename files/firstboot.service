@@ -13,7 +13,7 @@ StandardInput=tty-force
 StandardError=tty-force
 
 ExecStart=/bin/bash -c "/kiosksetup/firstboot.sh"
-ExecStartPost=/bin/mv /kiosksetup/firstboot.sh //kiosksetup/firstboot.done
+ExecStartPost=/bin/mv /kiosksetup/firstboot.sh /kiosksetup/firstboot.done
 Type=oneshot
 RemainAfterExit=no
 

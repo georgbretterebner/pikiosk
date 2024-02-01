@@ -31,6 +31,10 @@ chown -R root ./image/kiosksetup
 mv ./kiosk.sh ./image/kiosksetup
 chmod +x ./image/kiosksetup/kiosk.sh
 
+cp ./kiosk.service ./image/etc/systemd/system
+rm ./image/etc/apt/sources.list
+cp ./files/sources.list ./image/etc/apt
+
 mv ./25-wlan.network ./image/etc/systemd/network
 rm -f ./image/etc/resolv.conf
 mv ./resolv.conf ./image/etc
@@ -47,14 +51,11 @@ ln -s ./image/usr/lib/systemd/system/systemd-networkd.service ./image/etc/system
 mv ./wpa_supplicant-wlan0.conf ./image/etc/wpa_supplicant
 ln -s ./image/lib/systemd/system/wpa_supplicant@.service ./image/etc/systemd/system/multi-user.target.wants/wpa_supplicant@wlan0.service
 
-cp ./files/firstboot.service ./image/lib/systemd/system
-ln -s ./image/lib/systemd/system/firstboot.service ./image/etc/systemd/system/multi-user.target.wants/firstboot.service
+cp ./files/firstboot.service ./image/etc/systemd/system
+ln -s ./image/etc/systemd/system/firstboot.service ./image/etc/systemd/system/multi-user.target.wants/firstboot.service
 
 mv ./firstboot.sh ./image/kiosksetup
 chmod +x ./image/kiosksetup/firstboot.sh
-
-mv ./kiosk.service ./image/etc/systemd/system
-#rm -f ./image/etc/systemd/system/getty.target.wants/*
 
 sync
 umount ./image

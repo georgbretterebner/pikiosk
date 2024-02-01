@@ -83,8 +83,6 @@ EOF
 
 cat <<EOF > firstboot.sh
 
-export DEBIAN_FRONTEND=noninteractive
-
 echo "Unblocking wifi"
 rfkill unblock all
 
@@ -122,6 +120,9 @@ systemctl disable getty@.service
 echo "Changing ownership of /home/kiosk to user 'kiosk'..."
 chown -R kiosk /home/kiosk
 
+rm -rf /usr/share/icons/Adwaita/cursors/*
+cp /kiosksetup/left_ptr /usr/share/icons/Adwaita/cursors
+
 echo "Setting logind configuration options..."
 echo "NAutoVTs=0" >> /etc/systemd/logind.conf
 echo "ReserveVT=10" >> /etc/systemd/logind.conf
@@ -135,9 +136,8 @@ echo '$username:$password' | chpasswd
 usermod -aG sudo $username
 chsh r3 -s /bin/bash
 
-rm -rf /kiosksetup
-
-apt update && apt upgrade -y
+apt update
+apt upgrade -y
 
 apt install weston xwayland chromium-browser -y
 
@@ -146,8 +146,7 @@ echo "disable_splash=1" >> /boot/config.txt
 
 sed -i 's/$/ \*quiet nosplash loglevel=0 vt.global_cursor_default=0\*/' /boot/cmdline.txt
 
-rm -rf /usr/share/icons/Adwaita/cursors/*
-cp /kiosksetup/left_ptr /usr/share/icons/Adwaita/cursors
+rm -rf /kiosksetup
 
 reboot
 
